@@ -23,13 +23,13 @@ import {
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDhTaUR5AnPXJZ2g254rWI0DQV5cnPpn_M',
-  authDomain: 'crwn-db-c2b9b.firebaseapp.com',
-  projectId: 'crwn-db-c2b9b',
-  storageBucket: 'crwn-db-c2b9b.firebasestorage.app',
-  messagingSenderId: '851072464788',
-  appId: '1:851072464788:web:b03ba4d12d2934da1fc181',
-  measurementId: 'G-Y7PL9RTXK9'
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
 // Initialize Firebase
