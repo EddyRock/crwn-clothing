@@ -1,5 +1,3 @@
-/** @format */
-
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -33,7 +31,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firbaseApp = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const googleAuthProvider = new GoogleAuthProvider();
 googleAuthProvider.setCustomParameters({
@@ -76,8 +74,6 @@ export const getCategoriesAndDocuments = async () => {
 };
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation) => {
-  if (!userAuth) {
-  }
   const userDocRef = doc(db, 'users', userAuth.uid);
   const userSnapshot = await getDoc(userDocRef);
 
