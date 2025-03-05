@@ -1,8 +1,14 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
 import { USER_ACTION_TYPES } from './user.types';
-import { signInSuccess, signInFailed } from './user.action';
+import { signInSuccess, signInFailed, toggleSignUpLoading } from './user.action';
 
-import { getCurrentUser, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
+import {
+  getCurrentUser,
+  createUserDocumentFromAuth,
+  signInWithGooglePopup,
+  signInAuthUserWithEmailAndPassword,
+  createAuthUserWithEmailAndPassword
+} from '../../utils/firebase/firebase.utils';
 
 export function* signInWithGoogle() {
   try {
@@ -22,10 +28,29 @@ export function* signInWithEmail({ payload: { email, password } }) {
   }
 }
 
+export function* signUpWithEmail({ payload: { password = '', confirmPassword = '', email = '', displayName = '' } }) {
+  if (!Boolean(password === confirmPassword)) {
+    alert('Wrong password or Confirm password');
+    return;
+  }
+  yield put(toggleSignUpLoading())
+  try {
+    const { user } = yield call(createAuthUserWithEmailAndPassword, email, password);
+    yield call(getSnapshotFromUseAuth, user, { displayName });
+  } catch (error) {
+    if (error.code === 'auth/email-already-in-use') {
+      alert('Can not create email. Email already in user.');
+    }
+    console.error(error);
+  } finally {
+    yield put(toggleSignUpLoading())
+  }
+}
+
 export function* getSnapshotFromUseAuth(userAuth, additionalDetails) {
   try {
     const userSnapshot = yield call(createUserDocumentFromAuth, userAuth, additionalDetails)
-    yield  put(signInSuccess({  id: userSnapshot.id, ...userSnapshot.data }))
+    yield put(signInSuccess({  id: userSnapshot.id, ...userSnapshot.data }))
   } catch(error) {
     yield put(signInFailed(error));
   }
@@ -54,6 +79,10 @@ export function* onEmailSignInStart() {
   yield takeLatest(USER_ACTION_TYPES.EMAIL_SIGN_IN, signInWithEmail);
 }
 
+export function* onEmailSignUpStart() {
+  yield takeLatest(USER_ACTION_TYPES.EMAIL_SIGN_UP, signUpWithEmail);
+}
+
 export function* userSaga() {
-  yield all([call(onCheckUserSession), call(onGoogleSignInStart), call(onEmailSignInStart)])
+  yield all([call(onCheckUserSession), call(onGoogleSignInStart), call(onEmailSignInStart), call(onEmailSignUpStart)])
 }

@@ -20,6 +20,11 @@ export const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         error: payload
       };
+    case USER_ACTION_TYPES.SIGN_UP_LOADING:
+      return {
+        ...state,
+        loading: !state.loading
+      };
     default:
       return state;
   }

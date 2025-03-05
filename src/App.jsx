@@ -16,13 +16,6 @@ const App = () => {
 
   const onHandleUser = () => {
     dispatch(checkUserSession());
-    // const unsubscribe = onAuthStateChangedListener((user) => {
-    //   if (user) {
-    //     createUserDocumentFromAuth(user);
-    //   }
-    //   dispatch(setCurrentUser(user));
-    // });
-    // return unsubscribe;
   };
 
   useEffect(() => {
