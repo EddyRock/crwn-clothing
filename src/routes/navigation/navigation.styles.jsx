@@ -27,4 +27,13 @@ export const NavLink = styled(Link)`
   padding: 10px 15px;
   text-transform: uppercase;
   cursor: pointer;
+    
+  &[data-tooltip]:hover::after {
+      display: block;
+      position: absolute;
+      content: attr(data-tooltip);
+      border: 1px solid black;
+      background: #eee;
+      padding: .25em;
+  }
 `;
